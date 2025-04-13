@@ -1,0 +1,32 @@
+classes:
+    User - username, password
+        Patient - cart Cart, prescriptions [Prescription], wallet, applyConsultation(), orders [Order]
+        Doctor - prescribe()
+        Admin - getPatients(), getDoctors(), getMedicines(), getPrescriptions(), getOrders(), addPatient(), addDoctor(), addMedicine(), addPrescription(), addOrder()
+
+    Medicine - id, price
+    Prescription - id, meds <Medicine, amount>, doctor Doctor, patient Patient
+    Order - id, order <Medicine, amount>, status, totalCost
+    Cart - id, items <Medicine, amount>
+    EmergencyOrder - id, priorityLevel, processEmergencyOrder()
+    AutoSuggest - prescribe()
+
+    OnlinePharmacy - patients [Patient], doctors [Doctor], inventory <Medicine, amount>, orderHistory [Order]
+
+    AuthService - login(), logout(), register()
+    OrderService - addToCart(), removeFromCart(), checkout(), orderHistory(), activeOrders()
+    InventoryService - stockMeds(), getAvailableMeds()
+    ReminderService - setReminder(), getReminders(), sendReminder()
+    DataLoader - loadData(), saveData(), loadPatients(), loadDoctors(), loadMedicines(), loadPrescriptions(), loadOrders(), savePatient(), saveDoctor(), saveMedicine(), savePrescription(), saveOrder()
+
+    SessionManager - createSession(), endSession(), getSessionDetails()
+
+
+stored data:
+    users.txt - username, password, role
+    inventory.txt - id, medicineName, amount, price
+    orderHistory.txt - orderId, patientId, medicineId, amount, totalCost, status
+
+
+Scenarios:
+    Patient Login -> Patient adds OTC meds -> Patient consults Doctor -> Doctor gives Prescription -> Patient adds Prescription -> Patient checkout -> Logout
