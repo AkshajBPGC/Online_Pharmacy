@@ -1,4 +1,3 @@
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +14,15 @@ public class Patient extends User implements Serializable
     private int wallet;
     private Map<Medicine, Integer> cart;
 
-    public Patient(int id, String name, String phone, int age, int wallet)
+    public Patient() {
+        super();
+        this.orderHistory = new ArrayList<>();
+        this.prescriptions = new ArrayList<>();
+    }
+
+    public Patient(int id, String username, String password, String name, String phone, int age, int wallet)
     {
+        super(username, password);
         this.id = id;
         this.name = name;
         this.phone = phone;

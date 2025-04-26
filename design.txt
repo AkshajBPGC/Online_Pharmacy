@@ -19,7 +19,6 @@ classes:
     ReminderService - setReminder(), getReminders(), sendReminder()
     DataLoader - loadData(), saveData(), loadPatients(), loadDoctors(), loadMedicines(), loadPrescriptions(), loadOrders(), savePatient(), saveDoctor(), saveMedicine(), savePrescription(), saveOrder()
 
-    SessionManager - createSession(), endSession(), getSessionDetails()
 
 
 stored data:

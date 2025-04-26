@@ -1,0 +1,148 @@
+# Online Pharmacy - Menu Structure and Flow
+
+## Overview
+The Online Pharmacy system is a menu-driven console application that allows patients, doctors, and administrators to interact with the pharmacy services. This document outlines the menu structure and flow of the application.
+
+## Main Menu Structure
+1. **Main Menu**
+   - Login
+   - Register as Patient
+   - Exit
+
+2. **Login Menu**
+   - Patient Login
+   - Doctor Login
+   - Admin Login
+   - Back to Main Menu
+
+## User Menu Structures
+
+### Patient Menu
+1. View Available Medicines
+2. View My Prescriptions
+3. Add Medicine to Cart
+4. Add Prescription to Cart
+5. View Cart
+6. Checkout
+7. View Order History
+8. Add Money to Wallet
+9. Logout
+
+### Doctor Menu
+1. View Patients
+2. Create Prescription
+3. View My Prescriptions
+4. Update Personal Information
+5. Logout
+
+### Admin Menu
+1. View Inventory
+2. Add Medicine to Inventory
+3. Update Medicine Price
+4. View Patients
+5. View Doctors
+6. Add Doctor
+7. View All Orders
+8. Logout
+
+## Menu Flow Details
+
+### Patient Flow
+- **Login/Register**
+  - New patients can register with a username, password, name, phone, and age
+  - Initial wallet balance is set to 1000
+  - Existing patients can login with username and password
+
+- **View Available Medicines**
+  - Shows list of all medicines with name, price, and prescription requirement
+  - Displays current inventory quantity
+
+- **View My Prescriptions**
+  - Shows all prescriptions issued to the patient
+  - Displays prescription details including medicines, refill status, and validity
+
+- **Add Medicine to Cart**
+  - Allows adding medicines to cart with specified quantity
+  - Checks if prescription is required and validates accordingly
+  - Verifies inventory availability
+
+- **Add Prescription to Cart**
+  - Allows adding all medicines from a prescription to cart at once
+  - Checks if prescription is still valid and has refills
+  - Consumes one refill when used
+
+- **View Cart**
+  - Shows current cart contents with item names, quantities, and prices
+  - Displays total cost
+
+- **Checkout**
+  - Verifies wallet has sufficient funds
+  - Checks inventory availability
+  - Creates order and updates inventory
+  - Updates patient wallet and order history
+
+- **View Order History**
+  - Shows all orders placed by the patient
+  - Displays order details, status, and medicines
+
+- **Add Money to Wallet**
+  - Allows adding funds to patient's wallet
+
+### Doctor Flow
+- **Login**
+  - Doctors can login with username and password
+
+- **View Patients**
+  - Shows list of all patients registered in the system
+
+- **Create Prescription**
+  - Allows selecting a patient
+  - Allows adding multiple medicines with quantities
+  - Sets prescription details like refills and validity period
+
+- **View My Prescriptions**
+  - Shows all prescriptions issued by the doctor
+  - Displays prescription details and status
+
+- **Update Personal Information**
+  - Allows updating phone number, consultation fee, and password
+
+### Admin Flow
+- **Login**
+  - Admins can login with username and password
+
+- **View Inventory**
+  - Shows complete inventory with stock levels
+
+- **Add Medicine to Inventory**
+  - Can add existing medicines or create new ones
+  - Sets medicine attributes like name, price, and prescription requirement
+
+- **Update Medicine Price**
+  - Allows changing price of existing medicines
+
+- **View Patients**
+  - Shows detailed list of all patients
+
+- **View Doctors**
+  - Shows detailed list of all doctors
+
+- **Add Doctor**
+  - Registers new doctors in the system
+
+- **View All Orders**
+  - Shows all orders in the system with details
+
+## Data Persistence
+- All data is persisted to files in the data/ directory
+- Patient data, doctor data, inventory, and order history are saved automatically after relevant operations
+
+## Authentication
+- Session management handled by SessionManager class
+- Passwords are stored securely
+- Appropriate role-based access controls implemented
+
+## Sample User Credentials
+- **Patient**: Username: patient1, Password: password
+- **Doctor**: Username: drjohn, Password: password
+- **Admin**: Username: admin, Password: admin123
