@@ -7,14 +7,14 @@ import service.SessionManager;
 import java.util.Map;
 import java.util.Scanner;
 
-public interface AdminMenu extends Menu {
+public interface AdminMenu extends Menu, MenuUtils {
     static void showMenu(Pharmacy pharmacy, Scanner scanner) {
         Admin currentAdmin = SessionManager.getCurrentAdmin();
         
         boolean logout = false;
         
         while (!logout) {
-            Menu.clearScreen();
+            MenuUtils.clearScreen();
             System.out.println("===== ADMIN MENU =====");
             System.out.println("Welcome, " + currentAdmin.getName() + "!");
             System.out.println();
@@ -67,7 +67,7 @@ public interface AdminMenu extends Menu {
     }
     
     static void viewInventory(Pharmacy pharmacy) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== INVENTORY =====");
         Inventory inventory = pharmacy.getInventory();
         
@@ -92,7 +92,7 @@ public interface AdminMenu extends Menu {
     }
     
     static void addMedicineToInventory(Pharmacy pharmacy, Scanner scanner) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== ADD MEDICINE TO INVENTORY =====");
         
         // Check if we're adding an existing medicine or a new one
@@ -207,7 +207,7 @@ public interface AdminMenu extends Menu {
     }
     
     static void updateMedicinePrice(Pharmacy pharmacy, Scanner scanner) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== UPDATE MEDICINE PRICE =====");
         
         // Show medicines
@@ -252,7 +252,7 @@ public interface AdminMenu extends Menu {
     }
     
     static void viewPatients(Pharmacy pharmacy) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== PATIENTS LIST =====");
         
         Patient[] patients = pharmacy.getPatients();
@@ -277,7 +277,7 @@ public interface AdminMenu extends Menu {
     }
     
     static void viewDoctors(Pharmacy pharmacy) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== DOCTORS LIST =====");
         
         Doctor[] doctors = pharmacy.getDoctors();
@@ -302,7 +302,7 @@ public interface AdminMenu extends Menu {
     }
     
     static void addDoctor(Pharmacy pharmacy, Scanner scanner) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== ADD DOCTOR =====");
         
         System.out.print("Enter username: ");
@@ -354,7 +354,7 @@ public interface AdminMenu extends Menu {
     }
     
     static void viewAllOrders(Pharmacy pharmacy) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== ALL ORDERS =====");
         
         OrderHistory orderHistory = pharmacy.getOrderHistory();

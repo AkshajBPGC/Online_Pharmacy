@@ -7,7 +7,7 @@ import main.Pharmacy;
 import java.util.Map;
 import java.util.Scanner;
 
-public class MainMenu implements Menu {
+public class MainMenu implements Menu, MenuUtils{
     private static Scanner scanner = new Scanner(System.in);
     private static Pharmacy pharmacy;
     
@@ -19,7 +19,7 @@ public class MainMenu implements Menu {
         boolean exit = false;
         
         while (!exit) {
-            Menu.clearScreen();
+            MenuUtils.clearScreen();
             System.out.println("===== ONLINE PHARMACY SYSTEM =====");
             System.out.println("1. Login");
             System.out.println("2. Register as Patient");
@@ -51,7 +51,7 @@ public class MainMenu implements Menu {
     }
     
     private static void loginMenu() {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== LOGIN MENU =====");
         System.out.println("Select user type:");
         System.out.println("1. Patient");
@@ -95,7 +95,7 @@ public class MainMenu implements Menu {
     }
     
     private static void registerPatient() {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== PATIENT REGISTRATION =====");
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
@@ -139,7 +139,7 @@ public class MainMenu implements Menu {
         boolean backToMain = false;
         
         while (!backToMain) {
-            Menu.clearScreen();
+            MenuUtils.clearScreen();
             System.out.println("===== DEBUG MODE =====");
             System.out.println("1. View All Patients");
             System.out.println("2. View All Doctors");
@@ -181,7 +181,7 @@ public class MainMenu implements Menu {
     }
     
     private static void debugViewAllPatients() {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== DEBUG: ALL PATIENTS =====");
         
         Patient[] patients = DataManager.loadPatients();
@@ -211,7 +211,7 @@ public class MainMenu implements Menu {
                 System.out.printf("│ %-2d │ %-10s │ %-16s │ %-10s │ %-3d │ %-6d │ %-12d │ %-7d │%n",
                     patient.getId(),
                     patient.getUsername(),
-                    Menu.limitString(patient.getName(), 16),
+                    MenuUtils.limitString(patient.getName(), 16),
                     patient.getPhone(),
                     patient.getAge(),
                     patient.getWallet(),
@@ -226,7 +226,7 @@ public class MainMenu implements Menu {
     }
     
     private static void debugViewAllDoctors() {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== DEBUG: ALL DOCTORS =====");
         
         Doctor[] doctors = DataManager.loadDoctors();
@@ -256,7 +256,7 @@ public class MainMenu implements Menu {
                 System.out.printf("│ %-2d │ %-10s │ %-16s │ %-10s │ %-3d │ %-10d │ %-14d │%n",
                     doctor.getId(),
                     doctor.getUsername(),
-                    Menu.limitString(doctor.getName(), 16),
+                    MenuUtils.limitString(doctor.getName(), 16),
                     doctor.getPhone(),
                     doctor.getAge(),
                     doctor.getConsultationFees(),
@@ -270,7 +270,7 @@ public class MainMenu implements Menu {
     }
     
     private static void debugViewAllAdmins() {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== DEBUG: ALL ADMINS =====");
         
         Admin[] admins = DataManager.loadAdmins();
@@ -300,7 +300,7 @@ public class MainMenu implements Menu {
                 System.out.printf("│ %-2d │ %-10s │ %-16s │%n",
                     admin.getId(),
                     admin.getUsername(),
-                    Menu.limitString(admin.getName(), 16)
+                    MenuUtils.limitString(admin.getName(), 16)
                 );
             }
         }
@@ -310,7 +310,7 @@ public class MainMenu implements Menu {
     }
     
     private static void debugViewInventory() {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== DEBUG: INVENTORY =====");
         
         Inventory inventory = DataManager.loadInventory();
@@ -336,7 +336,7 @@ public class MainMenu implements Menu {
             
             System.out.printf("│ %-2d │ %-16s │ %-7d │ %-15s │ %-8d │%n",
                 medicine.getId(),
-                Menu.limitString(medicine.getName(), 16),
+                MenuUtils.limitString(medicine.getName(), 16),
                 medicine.getPrice(),
                 (medicine.isPrescriptionRequired() ? "Yes" : "No"),
                 quantity
@@ -349,7 +349,7 @@ public class MainMenu implements Menu {
     }
     
     private static void debugViewOrderHistory() {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== DEBUG: ORDER HISTORY =====");
         
         OrderHistory orderHistory = DataManager.loadOrderHistory();
@@ -378,9 +378,9 @@ public class MainMenu implements Menu {
             if (order != null) {
                 System.out.printf("│ %-6d │ %-15s │ %-18s │ %-8s │ %-9d │%n",
                     order.getId(),
-                    Menu.limitString(order.getPatient().getName(), 15),
+                    MenuUtils.limitString(order.getPatient().getName(), 15),
                     order.getDate(),
-                    Menu.limitString(order.getStatus(), 8),
+                    MenuUtils.limitString(order.getStatus(), 8),
                     order.getTotalCost()
                 );
             }
@@ -407,7 +407,7 @@ public class MainMenu implements Menu {
                     int subtotal = price * quantity;
                     
                     System.out.printf("│ %-16s │ %-8d │ %-7d │ %-9d │%n",
-                        Menu.limitString(medicine.getName(), 16),
+                        MenuUtils.limitString(medicine.getName(), 16),
                         quantity,
                         price,
                         subtotal

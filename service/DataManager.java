@@ -72,7 +72,7 @@ public interface DataManager
             ObjectInputStream ois = new ObjectInputStream(fis);
             Patient[] patients = (Patient[]) ois.readObject();
             ois.close();
-            System.out.println("Successfully loaded " + (patients != null ? patients.length : 0) + " patients.");
+            // System.out.println("Successfully loaded " + (patients != null ? patients.length : 0) + " patients.");
             return patients;
         }
         catch (Exception e)
@@ -98,7 +98,7 @@ public interface DataManager
             ObjectInputStream ois = new ObjectInputStream(fis);
             Doctor[] doctors = (Doctor[]) ois.readObject();
             ois.close();
-            System.out.println("Successfully loaded " + (doctors != null ? doctors.length : 0) + " doctors.");
+            // System.out.println("Successfully loaded " + (doctors != null ? doctors.length : 0) + " doctors.");
             return doctors;
         }
         catch (Exception e)
@@ -174,7 +174,7 @@ public interface DataManager
             ObjectInputStream ois = new ObjectInputStream(fis);
             Admin[] admins = (Admin[]) ois.readObject();
             ois.close();
-            System.out.println("Successfully loaded " + (admins != null ? admins.length : 0) + " admins.");
+            // System.out.println("Successfully loaded " + (admins != null ? admins.length : 0) + " admins.");
             return admins;
         } catch (Exception e) {
             System.out.println("Error loading admins");

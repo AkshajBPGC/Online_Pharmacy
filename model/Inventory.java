@@ -43,6 +43,21 @@ public class Inventory implements Serializable
         }
     }
 
+    public void addToInventory(int amount, Medicine... m)
+    {
+        for (Medicine med : m)
+        {
+            if (inventory.containsKey(med))
+            {
+                inventory.put(med, inventory.get(med) + amount);
+            }
+            else
+            {
+                inventory.put(med, amount);
+            }
+        }
+    }
+
     public boolean removeFromInventory(Medicine m)
     {        
         if (inventory.containsKey(m))

@@ -6,87 +6,91 @@ This document outlines the implementation status of required features according 
 (I) Overloaded methods (minimum 2)
 ----------------------------------
 ✅ IMPLEMENTED
-- DataManager.java: Contains multiple overloaded methods for loading and saving different data types
+- service.DataManager: Contains multiple overloaded methods for loading and saving different data types
   - savePatients(), saveDoctors(), saveAdmins(), saveInventory(), saveOrderHistory()
   - loadPatients(), loadDoctors(), loadAdmins(), loadInventory(), loadOrderHistory()
-- Menu.java: Contains overloaded methods like limitString() with different parameters
+- view.MenuUtils: Contains limitString() method that was refactored from the Menu interface
+- model.Inventory: Contains overloaded addToInventory() methods with varargs
 
 (II) Overloaded constructors (minimum 2)
 ----------------------------------------
 ✅ IMPLEMENTED
-- Patient.java: Contains multiple constructors
+- model.Patient: Contains multiple constructors
   - Patient(int id, String username, String password, String name, String phone, int age, int wallet)
-  - Patient constructor with prescription data
-- Prescription.java: Has multiple constructors with different parameters
-- Order.EmergencyOrder: Has two constructors, one taking a Map and one taking varargs
+  - Patient default constructor
+- model.Prescription: Has multiple constructors with different parameters
+- model.Order.EmergencyOrder: Has two constructors, one taking a Map and one taking varargs
+- model.Doctor: Has multiple constructors
 
 (III) Vararg overloading (minimum 2)
 ------------------------------------
 ✅ IMPLEMENTED
-- Order.EmergencyOrder: Second constructor uses varargs (Medicine... medicines)
-- The convertToMap() method in Order.EmergencyOrder also uses varargs
-- These are implemented in Order.java
+- model.Order.EmergencyOrder: Second constructor uses varargs (Medicine... medicines)
+- model.Inventory: Has two addToInventory methods with varargs implementation
+  - addToInventory(Medicine... m)
+  - addToInventory(int amount, Medicine... m)
 
 (IV) Nested classes (static or nonstatic, atleast 1)
 ---------------------------------------------------
 ✅ IMPLEMENTED
-- Order.java: Contains EmergencyOrder as a static nested class
+- model.Order: Contains EmergencyOrder as a static nested class
 - EmergencyOrder extends the main Order class with specialized functionality
 
 (V) Abstract class (minimum 1)
 -----------------------------
 ✅ IMPLEMENTED
-- User.java: Abstract base class for Patient, Doctor, and Admin classes
-- Implements common functionality and defines abstract methods for specific user types
+- model.User: Abstract base class for Patient, Doctor, and Admin classes
+- Implements common functionality for user authentication and credentials
 
 (VI) Interface (minimum 1)
 -------------------------
 ✅ IMPLEMENTED
-- Menu.java: Interface implemented by MainMenu and extended by other menu interfaces
-- PatientMenu.java, DoctorMenu.java, AdminMenu.java: All implement Menu interface
+- view.MenuUtils: Interface providing utility methods for display formatting and screen management
+- view.Menu: Interface that extends MenuUtils and provides menu navigation and user input methods
+- service.DataManager: Interface with static methods for data operations
+- view.PatientMenu, view.DoctorMenu, view.AdminMenu: All implement Menu interface
 
 (VII) Hierarchical Inheritance (atleast 1)
 -----------------------------------------
 ✅ IMPLEMENTED
-- User.java → Patient.java, Doctor.java, Admin.java
+- model.User → model.Patient, model.Doctor, model.Admin
 - Demonstrates hierarchical inheritance with common base class User and multiple derived classes
 
 (VIII) Multiple Inheritance (atleast 1)
 --------------------------------------
 ✅ IMPLEMENTED
 - Menu interfaces demonstrate multiple inheritance
-- PatientMenu, DoctorMenu, AdminMenu all extend Menu interface while implementing their own behavior
-- This is implemented through interface inheritance, which is Java's approach to multiple inheritance
+- view.Menu extends view.MenuUtils interface, showing interface inheritance
+- view.PatientMenu, view.DoctorMenu, view.AdminMenu all extend view.Menu interface while implementing their own behavior
+- This demonstrates multiple inheritance through interfaces, which is Java's approach to multiple inheritance
 
 (IX) Wrappers
 ------------
 ✅ IMPLEMENTED
 - Integer, Boolean, and other wrapper classes are used throughout the codebase
-- For example, in Menu.getIntInput() method for parsing input
-- Used in Inventory.java with HashMap<Medicine, Integer> to store quantity data
+- For example, in view.Menu.getIntInput() method for parsing input
+- Used in model.Inventory with HashMap<Medicine, Integer> to store quantity data
 
 (X) Package
 ----------
-❌ NOT IMPLEMENTED
-- The classes are not organized into proper packages
-- Need to organize classes into appropriate packages (e.g., model, view, service)
+✅ IMPLEMENTED
+- Classes are now organized into proper packages:
+  - model: Contains data entities (User, Patient, Doctor, Admin, Medicine, etc.)
+  - view: Contains UI components (MenuUtils, Menu, MainMenu, PatientMenu, etc.)
+  - service: Contains business logic (DataManager, SessionManager, OrderService)
+  - main: Contains the Pharmacy main class and Driver
 
 (XI) Exception handling (atleast two cases)
 ------------------------------------------
 ✅ IMPLEMENTED
-- DataManager.java: Contains exception handling for file operations
-- Menu.java: Contains exception handling for user input
+- service.DataManager: Contains exception handling for file operations
+- view.MenuUtils: Contains exception handling for screen clearing operation
+- view.Menu: Contains exception handling for user input
 - Try-catch blocks are used in multiple files for handling potential runtime exceptions
 
 (XII) I/O: File Handling, scanner class etc.
 -------------------------------------------
 ✅ IMPLEMENTED
-- File Handling: DataManager.java implements file I/O using ObjectInputStream and ObjectOutputStream
-- Scanner: Scanner class is used in Menu implementation for user input
-- Multiple I/O operations in DataManager.java for loading and saving system data
-
-Summary
--------
-Total implemented: 11/12 requirements
-Missing requirements:
-1. Package organization (X)
+- File Handling: service.DataManager implements file I/O using ObjectInputStream and ObjectOutputStream
+- Scanner: Scanner class is used in view.Menu implementation for user input
+- Multiple I/O operations in service.DataManager for loading and saving system data

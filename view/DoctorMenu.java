@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public interface DoctorMenu extends Menu {
+public interface DoctorMenu extends Menu, MenuUtils {
     
     static void showMenu(Pharmacy pharmacy, Scanner scanner) {
         Doctor currentDoctor = SessionManager.getCurrentDoctor();
@@ -17,7 +17,7 @@ public interface DoctorMenu extends Menu {
         boolean logout = false;
         
         while (!logout) {
-            Menu.clearScreen();
+            MenuUtils.clearScreen();
             System.out.println("===== DOCTOR MENU =====");
             System.out.println("Welcome, Dr. " + currentDoctor.getName() + "!");
             System.out.println();
@@ -58,7 +58,7 @@ public interface DoctorMenu extends Menu {
     }
     
     static void viewPatients(Pharmacy pharmacy) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== PATIENTS LIST =====");
         
         Patient[] patients = pharmacy.getPatients();
@@ -74,7 +74,7 @@ public interface DoctorMenu extends Menu {
                 foundAny = true;
                 System.out.printf("│ %-2d │ %-16s │ %-10s │ %-3d │%n",
                     patient.getId(),
-                    Menu.limitString(patient.getName(), 16),
+                    MenuUtils.limitString(patient.getName(), 16),
                     patient.getPhone(),
                     patient.getAge()
                 );
@@ -90,7 +90,7 @@ public interface DoctorMenu extends Menu {
     }
     
     static void createPrescription(Pharmacy pharmacy, Doctor doctor, Scanner scanner) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== CREATE PRESCRIPTION =====");
         
         // Select a patient
@@ -154,7 +154,7 @@ public interface DoctorMenu extends Menu {
                 
                 System.out.printf("│ %-2d │ %-16s │ %-7d │ %-15s │ %-8d │%n",
                     medicine.getId(),
-                    Menu.limitString(medicine.getName(), 16),
+                    MenuUtils.limitString(medicine.getName(), 16),
                     medicine.getPrice(),
                     (medicine.isPrescriptionRequired() ? "Yes" : "No"),
                     quantity
@@ -239,7 +239,7 @@ public interface DoctorMenu extends Menu {
     }
     
     static void viewDoctorPrescriptions(Doctor doctor) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== MY PRESCRIPTIONS =====");
         
         if (doctor.getPrescriptionsIssued() == null || doctor.getPrescriptionsIssued().isEmpty()) {
@@ -267,7 +267,7 @@ public interface DoctorMenu extends Menu {
             
             for (Map.Entry<Medicine, Integer> entry : prescription.getMedicines().entrySet()) {
                 System.out.printf("│ %-16s │ %-8d │%n",
-                    Menu.limitString(entry.getKey().getName(), 16),
+                    MenuUtils.limitString(entry.getKey().getName(), 16),
                     entry.getValue()
                 );
             }
@@ -277,7 +277,7 @@ public interface DoctorMenu extends Menu {
     }
     
     static void updatePersonalInfo(Doctor doctor, Pharmacy pharmacy, Scanner scanner) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== UPDATE PERSONAL INFORMATION =====");
         System.out.println("Current Information:");
         System.out.println("Name: " + doctor.getName());

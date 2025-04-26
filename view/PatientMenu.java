@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
 
-public interface PatientMenu extends Menu {
+public interface PatientMenu extends Menu, MenuUtils {
     static void showMenu(Pharmacy pharmacy, Scanner scanner) {
         Patient currentPatient = SessionManager.getCurrentPatient();
         Cart cart = new Cart(currentPatient.getId());
@@ -16,7 +16,7 @@ public interface PatientMenu extends Menu {
         boolean logout = false;
         
         while (!logout) {
-            Menu.clearScreen();
+            MenuUtils.clearScreen();
             System.out.println("===== PATIENT MENU =====");
             System.out.println("Welcome, " + currentPatient.getName() + "!");
             System.out.println("Wallet Balance: " + currentPatient.getWallet());
@@ -80,7 +80,7 @@ public interface PatientMenu extends Menu {
     }
     
     static void viewMedicines(Pharmacy pharmacy) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== AVAILABLE MEDICINES =====");
         Inventory inventory = pharmacy.getInventory();
         
@@ -101,7 +101,7 @@ public interface PatientMenu extends Menu {
             
             System.out.printf("│ %-2d │ %-16s │ %-7d │ %-15s │ %-8d │%n",
                 medicine.getId(),
-                Menu.limitString(medicine.getName(), 16),
+                MenuUtils.limitString(medicine.getName(), 16),
                 medicine.getPrice(),
                 (medicine.isPrescriptionRequired() ? "Yes" : "No"),
                 quantity
@@ -113,7 +113,7 @@ public interface PatientMenu extends Menu {
     }
 
     static void addMedicineToCart(Pharmacy pharmacy, Cart cart, Scanner scanner) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== ADD MEDICINE TO CART =====");
         
         // Show available medicines
@@ -183,7 +183,7 @@ public interface PatientMenu extends Menu {
     }
     
     static void addPrescriptionToCart(Patient patient, Cart cart, Scanner scanner) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== ADD PRESCRIPTION TO CART =====");
         
         if (patient.getPrescriptions() == null || patient.getPrescriptions().isEmpty()) {
@@ -228,7 +228,7 @@ public interface PatientMenu extends Menu {
     }
     
     static void viewPrescriptions(Patient patient) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== MY PRESCRIPTIONS =====");
         
         if (patient.getPrescriptions() == null || patient.getPrescriptions().isEmpty()) {
@@ -254,7 +254,7 @@ public interface PatientMenu extends Menu {
             
             for (Map.Entry<Medicine, Integer> entry : prescription.getMedicines().entrySet()) {
                 System.out.printf("│ %-16s │ %-8d │%n",
-                    Menu.limitString(entry.getKey().getName(), 16),
+                    MenuUtils.limitString(entry.getKey().getName(), 16),
                     entry.getValue()
                 );
             }
@@ -264,7 +264,7 @@ public interface PatientMenu extends Menu {
     }
 
     static void viewCart(Cart cart) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== SHOPPING CART =====");
         
         if (cart.cart.isEmpty()) {
@@ -285,7 +285,7 @@ public interface PatientMenu extends Menu {
             int itemTotal = unitPrice * quantity;
             
             System.out.printf("│ %-16s │ %-8d │ %-7d │ %-9d │%n",
-                Menu.limitString(medicine.getName(), 16),
+                MenuUtils.limitString(medicine.getName(), 16),
                 quantity,
                 unitPrice,
                 itemTotal
@@ -301,7 +301,7 @@ public interface PatientMenu extends Menu {
     }
     
     static void checkout(Pharmacy pharmacy, Patient patient, Cart cart) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== CHECKOUT =====");
         
         if (cart.cart.isEmpty()) {
@@ -338,7 +338,7 @@ public interface PatientMenu extends Menu {
     }
     
     static void placeEmergencyOrder(Pharmacy pharmacy, Patient patient, Scanner scanner) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== EMERGENCY ORDER =====");
         System.out.println("WARNING: Emergency orders have an additional fee of 500 rupees");
         System.out.println("and will be delivered on priority (status automatically set to 'Transporting')");
@@ -494,7 +494,7 @@ public interface PatientMenu extends Menu {
     }
     
     static void viewOrderHistory(Patient patient) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== ORDER HISTORY =====");
         
         if (patient.getOrderHistory() == null || patient.getOrderHistory().isEmpty()) {
@@ -511,7 +511,7 @@ public interface PatientMenu extends Menu {
             System.out.printf("│ %-6d │ %-18s │ %-8s │ %-9d │%n",
                 order.getId(),
                 order.getDate(),
-                Menu.limitString(order.getStatus(), 8),
+                MenuUtils.limitString(order.getStatus(), 8),
                 order.getTotalCost()
             );
         }
@@ -535,7 +535,7 @@ public interface PatientMenu extends Menu {
                 int subtotal = price * quantity;
                 
                 System.out.printf("│ %-16s │ %-8d │ %-7d │ %-9d │%n",
-                    Menu.limitString(medicine.getName(), 16),
+                    MenuUtils.limitString(medicine.getName(), 16),
                     quantity,
                     price,
                     subtotal
@@ -548,7 +548,7 @@ public interface PatientMenu extends Menu {
     }
     
     static void addMoneyToWallet(Patient patient, Scanner scanner) {
-        Menu.clearScreen();
+        MenuUtils.clearScreen();
         System.out.println("===== ADD MONEY TO WALLET =====");
         System.out.println("Current balance: " + patient.getWallet());
         System.out.print("Enter amount to add: ");
