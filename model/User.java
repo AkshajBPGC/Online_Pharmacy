@@ -1,15 +1,17 @@
+package model;
+
 import java.io.Serializable;
 
-abstract class User implements Serializable
+public abstract class User implements Serializable
 {
     private String username;
     private String password;
     
-    User() {
+    public User() {
         // Default constructor
     }
     
-    User(String username, String password) {
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
     }

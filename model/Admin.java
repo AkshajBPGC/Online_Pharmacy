@@ -1,4 +1,7 @@
+package model;
+
 import java.io.Serializable;
+import service.DataManager;
 
 public class Admin extends User implements Serializable {
     private int id;

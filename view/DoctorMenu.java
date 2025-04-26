@@ -1,3 +1,8 @@
+package view;
+
+import model.*;
+import service.SessionManager;
+import main.Pharmacy;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;

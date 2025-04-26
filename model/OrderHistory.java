@@ -1,7 +1,9 @@
+package model;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
-class OrderHistory implements Serializable
+public class OrderHistory implements Serializable
 {
     private Order[] orderHistory;
     private int numOrders;

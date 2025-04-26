@@ -1,3 +1,5 @@
+package view;
+
 import java.util.Scanner;
 
 /**
@@ -10,7 +12,7 @@ public interface Menu {
      * @param pharmacy The pharmacy instance
      * @param scanner The scanner for user input
      */
-    // abstract void showMenu(Pharmacy pharmacy, Scanner scanner);
+    // void showMenu(Pharmacy pharmacy, Scanner scanner);
     
     /**
      * Clears the console screen (platform independent)

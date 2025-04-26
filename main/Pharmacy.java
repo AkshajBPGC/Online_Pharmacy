@@ -1,3 +1,5 @@
+package main;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
@@ -5,7 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-class Pharmacy implements Serializable
+import model.*;
+import service.*;
+import view.*;
+
+public class Pharmacy implements Serializable
 {
     private String name;
     public Inventory inventory;
@@ -13,7 +19,7 @@ class Pharmacy implements Serializable
     private Doctor[] doctors;
     private OrderHistory orderHistory;
 
-    Pharmacy(String name)
+    public Pharmacy(String name)
     {
         this.name = name;
         
@@ -66,48 +72,90 @@ class Pharmacy implements Serializable
     }
     
     private static void initializeSampleData(Pharmacy pharmacy) {
-        // Check if data already exists
-        if (pharmacy.getPatients()[0] != null || pharmacy.getDoctors()[0] != null) {
-            return; // Data already initialized
+        // Only add sample data if the system is empty
+        if (pharmacy.isEmpty()) {
+            System.out.println("Initializing sample data for first run...");
+            
+            // Add sample admin
+            Admin admin = new Admin(1, "admin", "admin", "System Admin");
+            Admin[] admins = new Admin[1];
+            admins[0] = admin;
+            DataManager.saveAdmins(admins);
+            
+            // Add sample medicines
+            Medicine med1 = new Medicine(1, "Paracetamol", 10, false);
+            Medicine med2 = new Medicine(2, "Amoxicillin", 20, true);
+            Medicine med3 = new Medicine(3, "Aspirin", 15, false);
+            Medicine med4 = new Medicine(4, "Ibuprofen", 12, false);
+            Medicine med5 = new Medicine(5, "Cetirizine", 18, false);
+            
+            // Add to inventory
+            for (int i = 0; i < 50; i++) {
+                pharmacy.inventory.addToInventory(med1);
+            }
+            for (int i = 0; i < 30; i++) {
+                pharmacy.inventory.addToInventory(med2);
+            }
+            for (int i = 0; i < 40; i++) {
+                pharmacy.inventory.addToInventory(med3);
+            }
+            for (int i = 0; i < 25; i++) {
+                pharmacy.inventory.addToInventory(med4);
+            }
+            for (int i = 0; i < 35; i++) {
+                pharmacy.inventory.addToInventory(med5);
+            }
+            
+            // Save inventory
+            DataManager.saveInventory(pharmacy.inventory);
+            
+            // Add sample doctor
+            Doctor doctor = new Doctor(1, "doctor", "doctor", "Dr. John Smith", "9876543210", 45, 500);
+            pharmacy.doctors[0] = doctor;
+            DataManager.saveDoctors(pharmacy.doctors);
+            
+            // Add sample patient
+            Patient patient = new Patient(1, "patient", "patient", "Alice Johnson", "1234567890", 30, 2000);
+            pharmacy.patients[0] = patient;
+            DataManager.savePatients(pharmacy.patients);
+            
+            System.out.println("Sample data initialized!");
+        }
+    }
+    
+    public boolean isEmpty() {
+        // Check if all main data stores are empty
+        boolean inventoryEmpty = (inventory == null || inventory.inventory.isEmpty());
+        boolean patientsEmpty = true;
+        boolean doctorsEmpty = true;
+        boolean adminsEmpty = (DataManager.loadAdmins() == null);
+        
+        if (patients != null) {
+            for (Patient p : patients) {
+                if (p != null) {
+                    patientsEmpty = false;
+                    break;
+                }
+            }
         }
         
-        // Sample data initialization (same as in Driver class)
-        // Create a sample doctor
-        Doctor doctor = new Doctor(1, "drjohn", "password", "Dr. John Smith", "1234567890", 45, 500);
-        pharmacy.addDoctor(doctor);
+        if (doctors != null) {
+            for (Doctor d : doctors) {
+                if (d != null) {
+                    doctorsEmpty = false;
+                    break;
+                }
+            }
+        }
         
-        // Create a sample patient
-        Patient patient = new Patient(1, "patient1", "password", "John Doe", "9876543210", 35, 5000);
-        pharmacy.addPatient(patient);
-        
-        // Create a sample admin
-        Admin admin = new Admin(1, "admin", "admin123", "Admin User");
-        Admin[] admins = new Admin[1];
-        admins[0] = admin;
-        DataManager.saveAdmins(admins);
-        
-        // Add some medicines to inventory
-        Medicine crocin = new Medicine(1, "Crocin", 100, true);
-        Medicine paracetamol = new Medicine(2, "Paracetamol", 50, false);
-        Medicine insulin = new Medicine(3, "Insulin", 500, true);
-        
-        pharmacy.inventory.addToInventory(crocin);
-        pharmacy.inventory.addToInventory(crocin);
-        pharmacy.inventory.addToInventory(paracetamol);
-        pharmacy.inventory.addToInventory(paracetamol);
-        pharmacy.inventory.addToInventory(paracetamol);
-        pharmacy.inventory.addToInventory(insulin);
-        
-        // Save all data
-        pharmacy.saveAllData();
+        return inventoryEmpty && patientsEmpty && doctorsEmpty && adminsEmpty;
     }
     
-    public String getName() {
-        return name;
-    }
-    
-    public Inventory getInventory() {
-        return inventory;
+    public void saveAllData() {
+        DataManager.savePatients(patients);
+        DataManager.saveDoctors(doctors);
+        DataManager.saveInventory(inventory);
+        DataManager.saveOrderHistory(orderHistory);
     }
     
     public Patient[] getPatients() {
@@ -118,43 +166,31 @@ class Pharmacy implements Serializable
         return doctors;
     }
     
+    public Inventory getInventory() {
+        return inventory;
+    }
+    
     public OrderHistory getOrderHistory() {
         return orderHistory;
     }
     
     public void addPatient(Patient patient) {
-        // Find the first null slot
         for (int i = 0; i < patients.length; i++) {
             if (patients[i] == null) {
                 patients[i] = patient;
-                DataManager.savePatients(patients);
-                return;
+                break;
             }
         }
-        
-        // If we reach here, the array is full, so we need to expand it
-        Patient[] newPatients = new Patient[patients.length * 2];
-        System.arraycopy(patients, 0, newPatients, 0, patients.length);
-        newPatients[patients.length] = patient;
-        patients = newPatients;
         DataManager.savePatients(patients);
     }
     
     public void addDoctor(Doctor doctor) {
-        // Find the first null slot
         for (int i = 0; i < doctors.length; i++) {
             if (doctors[i] == null) {
                 doctors[i] = doctor;
-                DataManager.saveDoctors(doctors);
-                return;
+                break;
             }
         }
-        
-        // If we reach here, the array is full, so we need to expand it
-        Doctor[] newDoctors = new Doctor[doctors.length * 2];
-        System.arraycopy(doctors, 0, newDoctors, 0, doctors.length);
-        newDoctors[doctors.length] = doctor;
-        doctors = newDoctors;
         DataManager.saveDoctors(doctors);
     }
     
@@ -162,15 +198,7 @@ class Pharmacy implements Serializable
         orderHistory.addOrder(order);
         DataManager.saveOrderHistory(orderHistory);
     }
-    
-    public void saveAllData() {
-        DataManager.savePatients(patients);
-        DataManager.saveDoctors(doctors);
-        DataManager.saveInventory(inventory);
-        DataManager.saveOrderHistory(orderHistory);
-    }
 }
-
 
 
 class Driver

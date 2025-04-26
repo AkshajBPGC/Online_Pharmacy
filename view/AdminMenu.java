@@ -1,3 +1,9 @@
+package view;
+
+import model.*;
+import main.Pharmacy;
+import service.DataManager;
+import service.SessionManager;
 import java.util.Map;
 import java.util.Scanner;
 

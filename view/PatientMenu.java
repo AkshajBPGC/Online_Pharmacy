@@ -1,3 +1,9 @@
+package view;
+
+import model.*;
+import service.OrderService;
+import service.SessionManager;
+import main.Pharmacy;
 import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
@@ -21,9 +27,10 @@ public interface PatientMenu extends Menu {
             System.out.println("4. Add Prescription to Cart");
             System.out.println("5. View Cart");
             System.out.println("6. Checkout");
-            System.out.println("7. View Order History");
-            System.out.println("8. Add Money to Wallet");
-            System.out.println("9. Logout");
+            System.out.println("7. Place Emergency Order");
+            System.out.println("8. View Order History");
+            System.out.println("9. Add Money to Wallet");
+            System.out.println("10. Logout");
             System.out.print("Enter your choice: ");
             
             int choice = Menu.getIntInput(scanner);
@@ -48,14 +55,17 @@ public interface PatientMenu extends Menu {
                     checkout(pharmacy, currentPatient, cart);
                     break;
                 case 7:
-                    viewOrderHistory(currentPatient);
+                    placeEmergencyOrder(pharmacy, currentPatient, scanner);
                     break;
                 case 8:
+                    viewOrderHistory(currentPatient);
+                    break;
+                case 9:
                     addMoneyToWallet(currentPatient, scanner);
                     // Save updated patient data
                     pharmacy.saveAllData();
                     break;
-                case 9:
+                case 10:
                     logout = true;
                     System.out.println("Logging out...");
                     break;
@@ -325,6 +335,162 @@ public interface PatientMenu extends Menu {
         } else {
             System.out.println("Failed to place order. Please try again.");
         }
+    }
+    
+    static void placeEmergencyOrder(Pharmacy pharmacy, Patient patient, Scanner scanner) {
+        Menu.clearScreen();
+        System.out.println("===== EMERGENCY ORDER =====");
+        System.out.println("WARNING: Emergency orders have an additional fee of 500 rupees");
+        System.out.println("and will be delivered on priority (status automatically set to 'Transporting')");
+        System.out.println();
+        
+        // Show available medicines
+        viewMedicines(pharmacy);
+        
+        // Create a temporary cart for the emergency order
+        Map<Medicine, Integer> emergencyItems = new java.util.HashMap<>();
+        int totalBaseCost = 0;
+        boolean addingMedicines = true;
+        
+        while (addingMedicines) {
+            System.out.print("\nEnter Medicine ID (0 to finish): ");
+            int medicineId = Menu.getIntInput(scanner);
+            
+            if (medicineId == 0) {
+                if (emergencyItems.isEmpty()) {
+                    System.out.println("You must select at least one medicine for an emergency order.");
+                    continue;
+                }
+                addingMedicines = false;
+                continue;
+            }
+            
+            // Find medicine by ID
+            Medicine selectedMedicine = null;
+            int availableQuantity = 0;
+            
+            for (Map.Entry<Medicine, Integer> entry : pharmacy.getInventory().inventory.entrySet()) {
+                if (entry.getKey().getId() == medicineId) {
+                    selectedMedicine = entry.getKey();
+                    availableQuantity = entry.getValue();
+                    break;
+                }
+            }
+            
+            if (selectedMedicine == null) {
+                System.out.println("Medicine not found!");
+                continue;
+            }
+            
+            // Check if prescription is required
+            if (selectedMedicine.isPrescriptionRequired()) {
+                boolean hasPrescription = false;
+                
+                // Check if patient has a prescription for this medicine
+                for (Prescription prescription : patient.getPrescriptions()) {
+                    for (Map.Entry<Medicine, Integer> entry : prescription.getMedicines().entrySet()) {
+                        if (entry.getKey().getId() == selectedMedicine.getId()) {
+                            hasPrescription = true;
+                            break;
+                        }
+                    }
+                    if (hasPrescription) break;
+                }
+                
+                if (!hasPrescription) {
+                    System.out.println("This medicine requires a prescription. Please consult a doctor.");
+                    continue;
+                }
+            }
+            
+            System.out.print("Enter quantity (Available: " + availableQuantity + "): ");
+            int quantity = Menu.getIntInput(scanner);
+            
+            if (quantity <= 0) {
+                System.out.println("Invalid quantity!");
+                continue;
+            }
+            
+            if (quantity > availableQuantity) {
+                System.out.println("Not enough stock available!");
+                continue;
+            }
+            
+            // Add to emergency order items
+            emergencyItems.put(selectedMedicine, quantity);
+            totalBaseCost += selectedMedicine.getPrice() * quantity;
+            System.out.println(quantity + " units of " + selectedMedicine.getName() + " added to emergency order.");
+        }
+        
+        if (emergencyItems.isEmpty()) {
+            System.out.println("Emergency order cancelled.");
+            return;
+        }
+        
+        // Calculate total cost with emergency fee
+        int emergencyFee = 500;
+        int totalCost = totalBaseCost + emergencyFee;
+        
+        // Check if patient has enough money
+        if (patient.getWallet() < totalCost) {
+            System.out.println("Insufficient funds in your wallet!");
+            System.out.println("Total cost: " + totalCost + " (Base cost: " + totalBaseCost + " + Emergency fee: " + emergencyFee + ")");
+            System.out.println("Your balance: " + patient.getWallet());
+            System.out.println("Please add more money to your wallet.");
+            return;
+        }
+        
+        // Confirm order
+        System.out.println("\nEmergency Order Summary:");
+        System.out.println("-------------------------");
+        for (Map.Entry<Medicine, Integer> entry : emergencyItems.entrySet()) {
+            System.out.println(entry.getKey().getName() + " x" + entry.getValue() + " - " + 
+                              (entry.getKey().getPrice() * entry.getValue()) + " rupees");
+        }
+        System.out.println("-------------------------");
+        System.out.println("Base cost: " + totalBaseCost + " rupees");
+        System.out.println("Emergency fee: " + emergencyFee + " rupees");
+        System.out.println("Total cost: " + totalCost + " rupees");
+        System.out.println("-------------------------");
+        
+        System.out.print("Confirm emergency order? (y/n): ");
+        String confirm = scanner.nextLine().toLowerCase();
+        
+        if (!confirm.startsWith("y")) {
+            System.out.println("Emergency order cancelled.");
+            return;
+        }
+        
+        // Create order ID (simple implementation)
+        int orderId = (int) (System.currentTimeMillis() % 10000);
+        
+        // Create emergency order
+        Order.EmergencyOrder emergencyOrder = new Order.EmergencyOrder(orderId, patient, emergencyItems, totalBaseCost, "");
+        
+        // Update inventory
+        for (Map.Entry<Medicine, Integer> entry : emergencyItems.entrySet()) {
+            for (int i = 0; i < entry.getValue(); i++) {
+                pharmacy.getInventory().removeFromInventory(entry.getKey());
+            }
+        }
+        
+        // Deduct money from wallet
+        patient.subtractFromWallet(totalCost);
+        
+        // Add order to patient's order history
+        patient.addOrder(emergencyOrder);
+        
+        // Add order to pharmacy's order history
+        pharmacy.addOrder(emergencyOrder);
+        
+        // Save all data
+        pharmacy.saveAllData();
+        
+        System.out.println("Emergency order placed successfully!");
+        System.out.println("Order ID: " + emergencyOrder.getId());
+        System.out.println("Status: " + emergencyOrder.getStatus());
+        System.out.println("Your order is being transported on priority!");
+        System.out.println("Remaining wallet balance: " + patient.getWallet());
     }
     
     static void viewOrderHistory(Patient patient) {

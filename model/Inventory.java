@@ -1,3 +1,5 @@
+package model;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,21 +9,10 @@ public class Inventory implements Serializable
     public Map<Medicine, Integer> inventory;
 
     
-    Inventory()
+    public Inventory()
     {
         inventory = new HashMap<>();
     }
-
-    // @Override
-    // public String toString() 
-    // {
-    //     System.out.println("Inventory:");
-    //     for (Medicine med : inventory.keySet())
-    //     {
-    //         System.out.println(med.getName() + ": " + inventory.get(med));
-    //     }
-    //     return null;
-    // }
 
     @Override
     public String toString() 

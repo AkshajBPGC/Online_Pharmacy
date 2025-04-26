@@ -1,14 +1,16 @@
+package model;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-class Medicine implements Serializable
+public class Medicine implements Serializable
 {
     private int id;
     private String name;
     private int price;
     private boolean prescriptionRequired;
 
-    Medicine(int id, String name, int price, boolean prescriptionRequired)
+    public Medicine(int id, String name, int price, boolean prescriptionRequired)
     {
         this.id = id;
         this.name = name;
@@ -16,37 +18,37 @@ class Medicine implements Serializable
         this.prescriptionRequired = prescriptionRequired;
     }
 
-    void setPrescriptionRequired(boolean required)
+    public void setPrescriptionRequired(boolean required)
     {
         this.prescriptionRequired = required;
     }
 
-    void setPrice(int price)
+    public void setPrice(int price)
     {
         this.price = price;
     }
 
-    void setName(String name)
+    public void setName(String name)
     {
         this.name = name;
     }
 
-    int getId()
+    public int getId()
     {
         return id;
     }
 
-    String getName()
+    public String getName()
     {
         return name;
     }
 
-    int getPrice()
+    public int getPrice()
     {
         return price;
     }
 
-    boolean isPrescriptionRequired()
+    public boolean isPrescriptionRequired()
     {
         return prescriptionRequired;
     }

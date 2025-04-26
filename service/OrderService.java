@@ -1,3 +1,7 @@
+package service;
+
+import model.*;
+import main.Pharmacy;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;

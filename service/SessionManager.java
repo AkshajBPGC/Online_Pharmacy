@@ -1,3 +1,7 @@
+package service;
+
+import model.*;
+
 import java.io.Serializable;
 
 public class SessionManager implements Serializable {

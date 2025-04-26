@@ -1,9 +1,11 @@
+package model;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-class Prescription implements Serializable
+public class Prescription implements Serializable
 {
     private int id;
     private Doctor doctor;
@@ -17,7 +19,7 @@ class Prescription implements Serializable
     private int refillsRemaining; // The number of refills remaining
     private Date lastRefillDate; // The date of the last refill
 
-    Prescription(int id, Doctor doctor, Patient patient, Medicine[] medicines, int[] quantity, int refillsAllowed, int refillPeriod, Date issueDate, Date endDate)
+    public Prescription(int id, Doctor doctor, Patient patient, Medicine[] medicines, int[] quantity, int refillsAllowed, int refillPeriod, Date issueDate, Date endDate)
     {
         this.id = id;
         this.doctor = doctor;
@@ -39,7 +41,7 @@ class Prescription implements Serializable
     }
     
     // Additional constructor that directly accepts a Map
-    Prescription(int id, Doctor doctor, Patient patient, Map<Medicine, Integer> medicines, 
+    public Prescription(int id, Doctor doctor, Patient patient, Map<Medicine, Integer> medicines, 
                 int refillsAllowed, int refillPeriod, Date issueDate, Date endDate)
     {
         this.id = id;
