@@ -23,6 +23,13 @@ public class Cart implements Serializable
         cart.put(m, cart.getOrDefault(m, 0) + quantity);
     }
 
+    public void addToCart(Medicine... meds)
+    {
+        for (Medicine m : meds) {
+            cart.put(m, cart.getOrDefault(m, 0) + 1);
+        }
+    }
+
     public void addToCart(Prescription prescription)
     {
         for (Map.Entry<Medicine, Integer> entry : prescription.getMedicines().entrySet())
@@ -30,6 +37,13 @@ public class Cart implements Serializable
             Medicine medicine = entry.getKey();
             int quantity = entry.getValue();
             cart.put(medicine, cart.getOrDefault(medicine, 0) + quantity);
+        }
+    }
+
+    public void addToCart(Prescription... prescriptions)
+    {
+        for (Prescription prescription : prescriptions) {
+            this.addToCart(prescription);
         }
     }
 
